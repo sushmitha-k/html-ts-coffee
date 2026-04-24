@@ -1,22 +1,155 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buy me a coffee</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buy Me a Coffee ☕</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+      }
+
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        color: #fff;
+      }
+
+      .card {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        background: #111827;
+        padding: 30px;
+        border-radius: 16px;
+        width: 320px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      }
+
+      h1 {
+        font-size: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      button {
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        opacity: 0.9;
+      }
+
+      .primary {
+        background: #3b82f6;
+        color: white;
+      }
+
+      .secondary {
+        background: #374151;
+        color: white;
+      }
+
+      .danger {
+        background: #ef4444;
+        color: white;
+      }
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      input {
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        background: #1f2937;
+        color: white;
+      }
+
+      label {
+        font-size: 14px;
+        color: #9ca3af;
+      }
+
+      #toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 9999;
+        }
+
+        .toast {
+        background: #1f2937;
+        color: white;
+        padding: 12px 16px;
+        border-radius: 8px;
+        min-width: 200px;
+        font-size: 14px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.3s ease;
+        }
+
+        .toast.success { background: #16a34a; }
+        .toast.error { background: #dc2626; }
+        .toast.info { background: #2563eb; }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <button id="connectButton">Connect</button>
-    <button id="balanceButton">Get Balance</button>
-    <button id="withdrawButton">Withdraw</button>
+  <div class="card">
+    <h1>☕ Buy Me a Coffee</h1>
 
-    <label id="ethAmount">ETH Amount</label>
-    <input id="ethAmountInput" placeholder="0.1" />
+    <button id="connectButton" class="primary">Connect Wallet</button>
+    <button id="balanceButton" class="secondary">Get Balance</button>
+    <button id="withdrawButton" class="danger">Withdraw</button>
 
-    <button type="button" id="fundButton">Buy Coffee</button>
+    <div class="input-group">
+        <label for="ethAmountInput">ETH Amount</label>
+        <input id="ethAmountInput" placeholder="0.1" />
+
+        <button type="button" id="fundButton" class="primary">Buy Coffee</button>
+    </div>
+
+    <div id="toast-container"></div>
+  </div>
+
+  <script src="./index-ts.ts" type="module"></script>
 </body>
-
-<script src="./index-ts.ts" type="module"></script>
 </html>

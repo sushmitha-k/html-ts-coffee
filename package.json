@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+		"dev": "vite",
+		"anvil": "anvil --load-state fundme-anvil.json",
+		"format": "prettier --write .",
+		"compile": "tsc --project tsconfig.json "
+	},
   "keywords": [],
   "author": "",
   "license": "ISC",

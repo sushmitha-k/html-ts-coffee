@@ -20,6 +20,39 @@ const ethAmountInput = document.getElementById("ethAmountInput") as HTMLInputEle
 let walletClient: WalletClient
 let publicClient: PublicClient
 
+function showToast(message: string, type: "success" | "error" | "info" = "info") {
+  const container = document.getElementById("toast-container");
+  if (!container) return;
+
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.innerText = message;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
+}
+
+function getValidEthAmount(): string | null {
+  const value = ethAmountInput.value.trim();
+
+  if (!value) {
+    showToast("Please enter an amount", "error");
+    return null;
+  }
+
+  const num = Number(value);
+
+  if (isNaN(num) || num <= 0) {
+    showToast("Enter a valid ETH amount", "error");
+    return null;
+  }
+
+  return value;
+}
+
 async function connect(): Promise<void> {
   if (typeof window.ethereum !== "undefined") {
     walletClient = createWalletClient({
@@ -27,13 +60,15 @@ async function connect(): Promise<void> {
     })
     await walletClient.requestAddresses()
     connectButton.innerHTML = "Connected"
+    showToast("Wallet connected", "success")
   } else {
     connectButton.innerHTML = "Please install MetaMask"
   }
 }
 
 export async function fund(): Promise<void> {
-  const ethAmount: string = ethAmountInput.value
+  const ethAmount = getValidEthAmount();
+  if (!ethAmount) return; 
   console.log(`Funding with ${ethAmount}...`)
 
   if (typeof window.ethereum !== "undefined") {
@@ -45,7 +80,8 @@ export async function fund(): Promise<void> {
       const account: string = addresses[0]
       const currentChain = await getCurrentChain(walletClient)
 
-      console.log("Processing transaction...")
+      console.log("Processing transaction...");
+      showToast("Processing transaction...", "info");
       publicClient = createPublicClient({
         transport: custom(window.ethereum),
       })
@@ -57,8 +93,10 @@ export async function fund(): Promise<void> {
         chain: currentChain,
         value: parseEther(ethAmount),
       })
-      const hash = await walletClient.writeContract(request)
-      console.log("Transaction processed: ", hash)
+      const hash = await walletClient.writeContract(request);
+      console.log("Transaction processed: ", hash);
+      showToast("Transaction successful!", "success");
+      ethAmountInput.value = "";
     } catch (error) {
       console.error(error)
     }
@@ -77,7 +115,9 @@ export async function getBalance(): Promise<void> {
         address: contractAddress,
       })
       console.log(formatEther(balance))
+      showToast(`Balance: ${formatEther(balance)} ETH`, "info")
     } catch (error) {
+      showToast("Transaction failed", "error");
       console.error(error)
     }
   } else {
@@ -86,7 +126,8 @@ export async function getBalance(): Promise<void> {
 }
 
 export async function withdraw(): Promise<void> {
-  console.log("Withdrawing...")
+  const ethAmount = getValidEthAmount();
+  if (!ethAmount) return; 
 
   if (typeof window.ethereum !== "undefined") {
     try {
@@ -101,6 +142,7 @@ export async function withdraw(): Promise<void> {
       const currentChain = await getCurrentChain(walletClient)
 
       console.log("Processing transaction...")
+      showToast("Withdrawing...", "info");
       const { request } = await publicClient.simulateContract({
         account,
         address: contractAddress,
@@ -109,8 +151,11 @@ export async function withdraw(): Promise<void> {
         chain: currentChain,
       })
       const hash = await walletClient.writeContract(request)
+      ethAmountInput.value = "";
       console.log("Transaction processed: ", hash)
+      showToast("Transaction successful!", "success")
     } catch (error) {
+      showToast("Transaction failed", "error");
       console.error(error)
     }
   } else {
@@ -134,7 +179,7 @@ async function getCurrentChain(client: WalletClient): Promise<ReturnType<typeof 
       },
     },
   })
-  return currentChain
+  return currentChain;
 }
 
 // Attach event listeners
