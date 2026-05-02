@@ -3,149 +3,164 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Buy Me a Coffee ☕</title>
+  <title>Smart Contract Interaction</title>
 
-    <style>
-      * {
-        box-sizing: border-box;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 30%, #1e3a8a, transparent),
+                  radial-gradient(circle at 80% 20%, #7c3aed, transparent),
+                  #020617;
+      color: #fff;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(12px);
+      padding: 32px;
+      border-radius: 20px;
+      width: 340px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    .eth-icon {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 20px;
+      margin: 0;
+      text-align: center;
+    }
+
+    p {
+      font-size: 13px;
+      color: #9ca3af;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .input-group {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    input {
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background: #1f2937;
+      color: white;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      opacity: 0.9;
+    }
+
+    .primary {
+      background: linear-gradient(135deg, #3b82f6, #22d3ee);
+      color: white;
+    }
+
+    .secondary {
+      background: #1f2937;
+      color: white;
+    }
+
+    .danger {
+      background: #dc2626;
+      color: white;
+    }
+
+    #toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 9999;
+    }
+
+    .toast {
+      background: #1f2937;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      animation: slideIn 0.3s ease;
+    }
+
+    .toast.success { background: #16a34a; }
+    .toast.error { background: #dc2626; }
+    .toast.info { background: #2563eb; }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
       }
-
-      body {
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #0f172a, #1e293b);
-        color: #fff;
+      to {
+        opacity: 1;
+        transform: translateX(0);
       }
-
-      .card {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        background: #111827;
-        padding: 30px;
-        border-radius: 16px;
-        width: 320px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-      }
-
-      h1 {
-        font-size: 20px;
-        margin-bottom: 20px;
-        text-align: center;
-      }
-
-      .buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-bottom: 20px;
-      }
-
-      button {
-        padding: 10px;
-        border-radius: 8px;
-        border: none;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.2s ease;
-      }
-
-      button:hover {
-        transform: translateY(-1px);
-        opacity: 0.9;
-      }
-
-      .primary {
-        background: #3b82f6;
-        color: white;
-      }
-
-      .secondary {
-        background: #374151;
-        color: white;
-      }
-
-      .danger {
-        background: #ef4444;
-        color: white;
-      }
-
-      .input-group {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      input {
-        padding: 10px;
-        border-radius: 8px;
-        border: none;
-        outline: none;
-        background: #1f2937;
-        color: white;
-      }
-
-      label {
-        font-size: 14px;
-        color: #9ca3af;
-      }
-
-      #toast-container {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        z-index: 9999;
-        }
-
-        .toast {
-        background: #1f2937;
-        color: white;
-        padding: 12px 16px;
-        border-radius: 8px;
-        min-width: 200px;
-        font-size: 14px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        animation: slideIn 0.3s ease;
-        }
-
-        .toast.success { background: #16a34a; }
-        .toast.error { background: #dc2626; }
-        .toast.info { background: #2563eb; }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-    </style>
+    }
+  </style>
 </head>
 
 <body>
   <div class="card">
-    <h1>☕ Buy Me a Coffee</h1>
+
+    <!-- Ethereum Icon -->
+    <svg class="eth-icon" viewBox="0 0 256 417" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#fff" d="M127.9 0L124.4 12.2V279.1L127.9 282.6L255.8 210.1z"/>
+      <path fill="#ccc" d="M127.9 0L0 210.1L127.9 282.6V150.3z"/>
+      <path fill="#fff" d="M127.9 306.1L125.9 308.5V416.9L127.9 422.7L256 234.6z"/>
+      <path fill="#ccc" d="M127.9 422.7V306.1L0 234.6z"/>
+    </svg>
+
+    <h1>Smart Contract Funding</h1>
+    <p>Send ETH and interact with your smart contract securely</p>
 
     <button id="connectButton" class="primary">Connect Wallet</button>
-    <button id="balanceButton" class="secondary">Get Balance</button>
-    <button id="withdrawButton" class="danger">Withdraw</button>
 
     <div class="input-group">
-        <label for="ethAmountInput">ETH Amount</label>
-        <input id="ethAmountInput" placeholder="0.1" />
-
-        <button type="button" id="fundButton" class="primary">Buy Coffee</button>
+      <input id="ethAmountInput" placeholder="Enter ETH (e.g. 0.1)" />
+      <button id="fundButton" class="primary">Send ETH</button>
     </div>
+
+    <button id="balanceButton" class="secondary">Check Balance</button>
+    <button id="withdrawButton" class="danger">Withdraw Funds</button>
 
     <div id="toast-container"></div>
   </div>
